@@ -1,0 +1,57 @@
+# ========================================
+# Quarto / RStudio project files
+# ========================================
+
+# Quarto internal files
+.quarto/
+
+# Quarto cache & intermediates
+_cache/
+*.utf8.md
+*.knit.md
+*.nb.html
+
+# R / RStudio
+.Rhistory
+.RData
+.Rproj.user
+.Ruserdata
+
+# Logs / LaTeX intermediates (if using PDFs)
+*.log
+*.aux
+*.toc
+*.out
+*.synctex.gz
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Python / virtual environments (if using reticulate)
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+env/
+
+# Node / JS (if using Quarto extensions)
+node_modules/
+
+# ========================================
+# GitHub Pages site output
+# ========================================
+
+# Do NOT ignore /docs because it contains your HTML site
+# /docs/
+
+# ========================================
+# Optional: large or temporary files
+# ========================================
+
+*.csv
+*.rds
+*.Rdata
+
+/.quarto/
+**/*.quarto_ipynb

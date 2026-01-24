@@ -1,0 +1,47 @@
+---
+title: "Big year 2026"
+format:
+  html:
+    self-contained: true
+execute:
+  echo: false
+  warning: false
+  message: false
+project:
+    execute-dir: project
+---
+
+```{r}
+source("scripts/get_inat_obs.R")
+source("scripts/make_obs_table.R")
+source("scripts/plot_accum_species.R")
+source("scripts/plot_obs_map.R")
+source("scripts/make_obs_html_table.R")
+source("scripts/make_species_html_table.R")
+
+obs <- make_obs_table(
+  users = "kjaeck,splendidfairywren",
+  year = 2026,
+  taxon_id = 3
+)
+```
+
+# Accumulative Species Plot
+```{r}
+plotly::ggplotly(plot_accum_species(obs))
+```
+
+# Interactive Observation Map
+```{r}
+plot_obs_map(obs)
+```
+
+# Individual Observations Table
+```{r}
+make_obs_html_table(obs)
+```
+
+# Individual Species Table
+```{r}
+make_species_html_table(obs)
+```
