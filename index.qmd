@@ -7,7 +7,6 @@ execute:
   echo: false
   warning: false
   message: false
-  freeze: auto
   runtime: shiny
 project:
     execute-dir: project
