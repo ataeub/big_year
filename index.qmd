@@ -1,30 +1,42 @@
 ---
-title: "Big year 2026"
+title: "🦆 Big year 2026 🐦‍⬛"
 format:
   html:
-    self-contained: true
+    css: styles.css
 execute:
   echo: false
   warning: false
   message: false
+  freeze: auto
+  runtime: shiny
 project:
     execute-dir: project
 ---
 
 ```{r}
-source("scripts/get_inat_obs.R")
-source("scripts/make_obs_table.R")
-source("scripts/plot_accum_species.R")
-source("scripts/plot_obs_map.R")
-source("scripts/make_obs_html_table.R")
-source("scripts/make_species_html_table.R")
+scripts <- list.files("scripts/", pattern = "\\.R$", full.names = TRUE)
+invisible(lapply(scripts, source))
 
 obs <- make_obs_table(
-  users = "kjaeck,splendidfairywren",
+  users = "splendidfairywren,kjaeck", # Don't add commas between names!
   year = 2026,
-  taxon_id = 3
+  taxon_id = 3,
+  only_species = TRUE
 )
 ```
+# Summary
+::: {.stat-grid}
+```{r results="asis"}
+cat(make_author_stat_cards(obs))
+```
+:::
+
+## Rote Liste (Rote-Liste-Zentrum)
+::: {.stat-grid}
+```{r results="asis"}
+cat(make_rlz_stat_cards(obs))
+```
+:::
 
 # Accumulative Species Plot
 ```{r}
@@ -41,7 +53,7 @@ plot_obs_map(obs)
 make_obs_html_table(obs)
 ```
 
-# Individual Species Table
+# Observed Species Table
 ```{r}
 make_species_html_table(obs)
 ```

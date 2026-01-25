@@ -3,7 +3,10 @@
 #' @param obs data.frame with columns: author, datetime, name_sc, name_de, place, photo, photo_full
 #' @param show_photos logical, whether to display thumbnails
 #' @return DT::datatable object
-make_obs_html_table <- function(obs, show_photos = TRUE) {
+make_obs_html_table <- function(
+  obs,
+  show_photos = TRUE,
+  only_species = TRUE) {
   library(dplyr)
   library(DT)
   
