@@ -1,11 +1,20 @@
-make_obs_table <- function(users, year, taxon_id, only_species = TRUE) {
-  source("scripts/get_inat_obs.R")
+make_obs_table <- function(users,
+                           year,
+                           taxon_id,
+                           only_species = TRUE,
+                           ssp_to_sp = TRUE) {
   obs <- get_inat_obs(
-    user = users,
+    users = users,
     taxon_id = taxon_id,
     year = year
-  ) |>
-    dplyr::filter(if (only_species) taxon.rank_level <= 10) |>
+  )
+
+  if (isTRUE(ssp_to_sp)) {
+    obs <- replace_subspecies_with_parent(obs)
+  }
+
+  obs |>
+    dplyr::filter(if (only_species) taxon.rank_level <= 10 else TRUE) |>
     dplyr::select(
       author = user.login_exact,
       datetime = time_observed_at,
@@ -20,5 +29,4 @@ make_obs_table <- function(users, year, taxon_id, only_species = TRUE) {
       estab = taxon.establishment_means.establishment_means,
       uri
     )
-  obs
 }
