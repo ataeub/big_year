@@ -1,0 +1,23 @@
+Package: big_year
+Type: Project
+Title: Big year
+Version: 0.0.1
+Authors@R: 
+    person("Alexander", "Täuber", , "a.taeuber@pm.me", role = c("aut", "cre", "cph"))
+Description:
+    Quarto website for to create a "Big Year" analysis from iNaturalist observations for 
+    one or more people. I use it for birds but every higher taxa should be feasible.
+License: MIT + file LICENSE
+Encoding: UTF-8
+
+Imports:
+    dplyr,
+    DT,
+    httr,
+    jsonlite,
+    leaflet,
+    lubridate,
+    plotly,
+    purrr,
+    stringr,
+    tidyr,

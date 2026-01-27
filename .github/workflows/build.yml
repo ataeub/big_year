@@ -2,9 +2,9 @@ name: Build Quarto site
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   schedule:
-    - cron: '0 */6 * * *'  # runs every 6 hours
+    - cron: "0 */23 * * *" # runs every 6 hours
 
 jobs:
   build:
@@ -20,14 +20,15 @@ jobs:
         uses: quarto-dev/quarto-actions/setup-quarto@v2
 
       - name: Install packages
-        run: |
-          R -e "install.packages(c('dplyr','DT','htmltools','leaflet','lubridate','purrr','tidyr'))"
+        uses: r-lib/actions/setup-r-dependencies@v2
 
       - name: Render site
-        run: quarto render
+        uses: quarto-dev/quarto-actions/render@v2
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: docs
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+        uses: actions/deploy-pages@v2
