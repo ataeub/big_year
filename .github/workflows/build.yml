@@ -4,23 +4,25 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "0 */23 * * *" # runs every 6 hours
+    - cron: '0 18 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-
-      - name: Install Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Install packages
+      - name: Setup R and install packages
         uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+            install-quarto: true
+        env:
+            R_COMPILE_AND_INSTALL_PACKAGES: never
 
       - name: Render site
         uses: quarto-dev/quarto-actions/render@v2
@@ -32,3 +34,5 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
