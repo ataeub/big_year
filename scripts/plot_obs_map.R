@@ -1,52 +1,44 @@
 plot_obs_map <- function(obs) {
-  require(dplyr)
-  require(tidyr)
-  require(leaflet)
-  require(htmltools)
 
-  map_data <- obs %>%
-    # split the single string "lat, lon" into numeric columns
-    separate(
+  map_data <- obs |>
+    tidyr::separate(
       col = coords,
       into = c("lat", "lon"),
       sep = ",\\s*",
       convert = TRUE,
       remove = FALSE
-    ) %>%
-    # convert datetime to POSIXct
-    mutate(datetime = as.POSIXct(datetime, tz = "UTC")) %>%
-    # filter only valid coordinates
-    filter(
+    ) |>
+    dplyr::mutate(
+      datetime = as.POSIXct(datetime, tz = "UTC")
+    ) |>
+    dplyr::filter(
       !is.na(lat) & !is.na(lon),
       lat >= -90 & lat <= 90,
       lon >= -180 & lon <= 180
     )
 
-  # color per author
-  pal <- colorFactor(
+  pal <- leaflet::colorFactor(
     palette = "Set1",
     domain = map_data$author
   )
 
-  leaflet(map_data) %>%
-    addProviderTiles(providers$OpenStreetMap) %>%
-    addCircleMarkers(
+  leaflet::leaflet(map_data) |>
+    leaflet::addProviderTiles(leaflet::providers$OpenStreetMap) |>
+    leaflet::addCircleMarkers(
       lng = ~lon,
       lat = ~lat,
       radius = 6,
       stroke = FALSE,
       fillOpacity = 0.8,
-      color = ~ pal(author),
+      color = ~pal(author),
 
-      # hover label
-      label = ~ paste0(
+      label = ~paste0(
         "<b>", name_sc, "</b><br/>",
         ifelse(is.na(name_de), "", name_de), "<br/>",
         author
-      ) %>% lapply(htmltools::HTML),
+      ) |> lapply(htmltools::HTML),
 
-      # popup
-      popup = ~ paste0(
+      popup = ~paste0(
         "<b>", name_sc, "</b>",
         ifelse(is.na(name_de), "", paste0(" (", name_de, ")")),
         "<br/><br/>",
@@ -61,9 +53,9 @@ plot_obs_map <- function(obs) {
             "onclick=\"this.src='", photo_full, "'\">"
           )
         )
-      ) %>% lapply(htmltools::HTML)
-    ) %>%
-    addLegend(
+      ) |> lapply(htmltools::HTML)
+    ) |>
+    leaflet::addLegend(
       position = "bottomright",
       pal = pal,
       values = ~author,
