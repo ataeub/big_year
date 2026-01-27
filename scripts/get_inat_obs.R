@@ -26,7 +26,7 @@ get_inat_obs <- function(users,
       d2 = end_date,
       per_page = per_page,
       page = 1,
-      preferred_place_id = "7207"
+      preferred_place_id = "7207" # German locale (Change if necessary)
     )
   )
   httr::stop_for_status(r)
