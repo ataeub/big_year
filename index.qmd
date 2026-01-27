@@ -20,7 +20,8 @@ obs <- make_obs_table(
   users = "splendidfairywren,kjaeck", # Don't add commas between names!
   year = 2026,
   taxon_id = 3,
-  only_species = TRUE
+  only_species = TRUE, # Will remove higher order taxa
+  ssp_to_sp = TRUE # Will replace all taxa info (Name, Conservation status, etc.) with the parent species
 )
 ```
 # Summary
