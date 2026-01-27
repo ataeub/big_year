@@ -9,7 +9,6 @@ Description:
     one or more people. I use it for birds but every higher taxa should be feasible.
 License: MIT + file LICENSE
 Encoding: UTF-8
-
 Imports:
     dplyr,
     DT,
