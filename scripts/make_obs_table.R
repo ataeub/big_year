@@ -1,6 +1,7 @@
 make_obs_table <- function(users,
                            year,
                            taxon_id,
+                           user_pseudonyms = NULL,
                            only_species = TRUE,
                            ssp_to_sp = TRUE) {
   obs <- get_inat_obs(
@@ -11,6 +12,10 @@ make_obs_table <- function(users,
 
   if (isTRUE(ssp_to_sp)) {
     obs <- replace_subspecies_with_parent(obs)
+  }
+
+  if (!is.null(user_pseudonyms)) {
+    obs <- rename_obs_authors(obs, user_pseudonyms)
   }
 
   obs |>
