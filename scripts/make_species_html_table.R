@@ -8,7 +8,11 @@ make_species_html_table <- function(obs) {
       RL = paste(sort(unique(cons_stat[cons_auth == "Rote-Liste-Zentrum"])), collapse = ", "),
       .groups = "drop"
     ) |>
-    dplyr::select(name_de, name_sc, observed_by, RL)
+    dplyr::select(
+      "Name trivial" = name_de,
+      "Name scientific" = name_sc,
+      Observer = observed_by,
+      "RL Status" = RL)
 
   DT::datatable(
     obs_species,
