@@ -1,4 +1,4 @@
-name: Build Quarto site
+name: Build Big Year Quarto Site
 
 on:
   push:
