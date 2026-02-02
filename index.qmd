@@ -42,6 +42,13 @@ cat(make_rlz_stat_cards(obs))
 ```
 :::
 
+## Possible species
+::: {.stat-grid}
+```{r results="asis"}
+cat(make_species_coverage_card(obs))
+```
+:::
+
 # Accumulative Species Plot
 ```{r}
 plotly::ggplotly(plot_accum_species(obs))
