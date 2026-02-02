@@ -9,40 +9,33 @@
 #' @export
 get_inat_obs <- function(users,
                          taxon_id,
-                         year,
-                         per_page = 50,
-                         verbose = FALSE) {
+                         year = NULL,
+                         start_date = NULL,
+                         end_date = NULL,
+                         lat = NULL,
+                         lng = NULL,
+                         radius_km = NULL,
+                         locale_id = "7207",
+                         per_page = 200,
+                         page = NULL) {
   base_url <- "https://api.inaturalist.org/v1/observations"
-  start_date <- paste0(year, "-01-01")
-  end_date <- paste0(year, "-12-31")
 
-  # First request to get total results
-  r <- httr::GET(
-    url = base_url,
-    query = list(
-      user_id = users,
-      taxon_id = taxon_id,
-      d1 = start_date,
-      d2 = end_date,
-      per_page = per_page,
-      page = 1,
-      preferred_place_id = "7207" # German locale (Change if necessary)
-    )
-  )
-  httr::stop_for_status(r)
-  txt <- httr::content(r, as = "text", encoding = "UTF-8")
-  dat <- jsonlite::fromJSON(txt, flatten = TRUE)
-
-  total_results <- dat$total_results
-  total_pages <- ceiling(total_results / per_page)
-
-  if (verbose) {
-    message("Total observations: ", total_results)
-    message("Pages to fetch: ", total_pages)
+  if (!is.null(year) && (!is.null(start_date) || !is.null(end_date))) {
+    stop("Use either `year` OR `start_date`/`end_date`, not both.")
   }
 
-  # Helper: fetch single page
-  fetch_page <- function(page) {
+  if (!is.null(lat) || !is.null(lng) || !is.null(radius_km)) {
+    if (any(is.null(c(lat, lng, radius_km)))) {
+      stop("lat, lng, and radius_km must all be supplied together")
+    }
+  }
+
+  if (!is.null(year)) {
+    start_date <- paste0(year, "-01-01")
+    end_date <- paste0(year, "-12-31")
+  }
+
+  fetch_page <- function(page = 1, results = TRUE) {
     r <- httr::GET(
       url = base_url,
       query = list(
@@ -52,36 +45,29 @@ get_inat_obs <- function(users,
         d2 = end_date,
         per_page = per_page,
         page = page,
-        preferred_place_id = "7207"
+        preferred_place_id = locale_id,
+        lat = lat,
+        lng = lng,
+        radius = radius_km,
+        order_by = "created_at" # Always order by created datetime
       )
     )
     httr::stop_for_status(r)
-    jsonlite::fromJSON(
-      httr::content(r, as = "text", encoding = "UTF-8"),
-      flatten = TRUE
-    )$results
+    txt <- httr::content(r, as = "text", encoding = "UTF-8")
+    meta <- jsonlite::fromJSON(txt, flatten = TRUE)
+    if (results) meta$results else meta
   }
 
-  # Fetch all pages
-  results <- purrr::map_dfr(seq_len(total_pages), fetch_page)
+  if (!is.null(page)) {
+    results <- fetch_page(page = page, results = TRUE)
+  } else {
+    # First request to get total results
+    dat <- fetch_page(results = FALSE)
+    total_results <- dat$total_results
+    total_pages <- ceiling(total_results / per_page)
 
-  # Extract first photo URL for each observation
-  results <- results |>
-    dplyr::mutate(
-      photo_url = purrr::map_chr(photos, function(x) {
-        if (is.null(x$url[1])) {
-          NA_character_
-        } else {
-          x$url[1]
-        }
-      })
-    ) |>
-    dplyr::mutate(
-      photo_url_full = stringr::str_replace(
-        photo_url,
-        "square.jpg",
-        "original.jpg"
-      )
-    )
+    # Fetch all pages
+    results <- purrr::map_dfr(seq_len(total_pages), fetch_page)
+  }
   results
 }
