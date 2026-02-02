@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "!README.md"
 
 website:
   title: "Big Year 2026"
