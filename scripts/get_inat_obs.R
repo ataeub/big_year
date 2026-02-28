@@ -2,8 +2,7 @@
 #'
 #' @param users Character vector. iNaturalist usernames or user IDs.
 #' @param taxon_id Numeric or character vector. iNaturalist taxon ID(s).
-#' @param year Numeric. Year of observations (mutually exclusive with start_date/end_date).
-#' @param start_date, end_date Character. Start and end dates in "YYYY-MM-DD" format (mutually exclusive with year).
+#' @param start_date, end_date Character. Start and end dates in "YYYY-MM-DD" format.
 #' @param lat, lng Numeric. Latitude and longitude for spatial filtering (must be used with radius_km).
 #' @param radius_km Numeric. Radius in kilometers for spatial filtering.
 #' @param locale_id Character. Preferred place ID for results (default "7207").
@@ -15,7 +14,6 @@
 #' @export
 get_inat_obs <- function(users,
                          taxon_id,
-                         year = NULL,
                          start_date = NULL,
                          end_date = NULL,
                          lat = NULL,
@@ -25,21 +23,6 @@ get_inat_obs <- function(users,
                          per_page = 200,
                          page = NULL) {
   base_url <- "https://api.inaturalist.org/v1/observations"
-
-  if (!is.null(year) && (!is.null(start_date) || !is.null(end_date))) {
-    stop("Use either `year` OR `start_date`/`end_date`, not both.")
-  }
-
-  if (!is.null(lat) || !is.null(lng) || !is.null(radius_km)) {
-    if (any(is.null(c(lat, lng, radius_km)))) {
-      stop("lat, lng, and radius_km must all be supplied together")
-    }
-  }
-
-  if (!is.null(year)) {
-    start_date <- paste0(year, "-01-01")
-    end_date <- paste0(year, "-12-31")
-  }
 
   fetch_page <- function(page = 1, results = TRUE) {
     r <- httr::GET(

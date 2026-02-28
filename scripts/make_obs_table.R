@@ -1,12 +1,26 @@
 make_obs_table <- function(users,
-                           year,
+                           year = NULL,
+                           start_date = NULL,
+                           end_date = NULL,
                            taxon_id,
                            user_pseudonyms = NULL,
                            only_species = TRUE,
                            ssp_to_sp = TRUE,
                            cache = TRUE) {
-  # define cache file
-  cache_file <- "cache/observations.rds"
+  if (!is.null(year) && (!is.null(start_date) || !is.null(end_date))) {
+    stop("Use either `year` OR `start_date`/`end_date`, not both.")
+  }
+
+  if (!is.null(lat) || !is.null(lng) || !is.null(radius_km)) {
+    if (any(is.null(c(lat, lng, radius_km)))) {
+      stop("lat, lng, and radius_km must all be supplied together")
+    }
+  }
+
+  if (!is.null(year)) {
+    start_date <- paste0(year, "-01-01")
+    end_date <- paste0(year, "-12-31")
+  }
 
   # create cache directory if missing
   if (!dir.exists("cache")) dir.create("cache")
