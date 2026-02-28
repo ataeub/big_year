@@ -22,31 +22,43 @@ make_obs_table <- function(users,
     end_date <- paste0(year, "-12-31")
   }
 
-  # create cache directory if missing
-  if (!dir.exists("cache")) dir.create("cache")
-
-  # helper: check if cache is still valid
-  is_cache_valid <- function() {
-    if (!file.exists(cache_file)) {
-      return(FALSE)
-    }
-
-    cache_obs <- readRDS(cache_file)
-
-    # get newest observation from iNaturalist
-    latest_inat_obs <- get_inat_obs(
-      users = users,
-      taxon_id = taxon_id,
-      year = year,
-      per_page = 1,
-      page = 1
+  if (cache) {
+    # define cache file
+    cache_file <- glue::glue(
+      "cache/observations_{users}_{start_date}_{end_date}_{taxon_id}.rds"
     )
 
-    # compare newest datetime in cache vs API
-    latest_cache_dt <- max(as.POSIXct(cache_obs$time_observed_at, tz = "UTC"))
-    latest_api_dt <- as.POSIXct(latest_inat_obs$time_observed_at[1], tz = "UTC")
+    # create cache directory if missing
+    if (!dir.exists("cache")) dir.create("cache")
 
-    latest_cache_dt >= latest_api_dt
+    # helper: check if cache is still valid
+    is_cache_valid <- function() {
+      if (!file.exists(cache_file)) {
+        return(FALSE)
+      }
+
+      cache_obs <- readRDS(cache_file)
+
+      # get newest observation from iNaturalist
+      latest_inat_obs <- get_inat_obs(
+        users = users,
+        taxon_id = taxon_id,
+        start_date = start_date,
+        end_date = end_date,
+        lat = lat,
+        lng = lng,
+        radius_km = radius_km,
+        locale_id = locale_id,
+        per_page = 1,
+        page = 1
+      )
+
+      # compare newest datetime in cache vs API
+      latest_cache_dt <- max(as.POSIXct(cache_obs$time_observed_at, tz = "UTC"))
+      latest_api_dt <- as.POSIXct(latest_inat_obs$time_observed_at[1], tz = "UTC")
+
+      latest_cache_dt >= latest_api_dt
+    }
   }
 
   # load from cache if valid
