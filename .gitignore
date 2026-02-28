@@ -55,3 +55,7 @@ node_modules/
 
 /.quarto/
 **/*.quarto_ipynb
+
+*.afphoto
+
+gallery/*
