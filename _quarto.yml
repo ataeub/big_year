@@ -5,6 +5,16 @@ project:
     - "*.qmd"
     - "!README.md"
 
+format:
+  html:
+    theme: minty
+
 website:
-  title: "Big Year 2026"
-  
+  title: "Big Year 2026 🦆🐦‍⬛"
+  navbar:
+    logo: "logo.png"
+    background: primary
+    left:
+      - text: "Home"
+        href: index.qmd
+  favicon: "logo.png"
