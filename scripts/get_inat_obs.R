@@ -1,11 +1,17 @@
-#' Get iNaturalist observations for a given user, taxon, and year
+#' Get iNaturalist observations for one or more users, taxa, and a date range
 #'
-#' @param user Character. iNaturalist username or user ID.
-#' @param taxon_id Numeric. iNaturalist taxon ID.
-#' @param year Numeric. Year of observations.
-#' @param per_page Numeric. Observations per page (max 200).
-#' @param verbose Logical. Print progress messages.
-#' @return A data.frame of observations with a `photo_url` column.
+#' @param users Character vector. iNaturalist usernames or user IDs.
+#' @param taxon_id Numeric or character vector. iNaturalist taxon ID(s).
+#' @param year Numeric. Year of observations (mutually exclusive with start_date/end_date).
+#' @param start_date, end_date Character. Start and end dates in "YYYY-MM-DD" format (mutually exclusive with year).
+#' @param lat, lng Numeric. Latitude and longitude for spatial filtering (must be used with radius_km).
+#' @param radius_km Numeric. Radius in kilometers for spatial filtering.
+#' @param locale_id Character. Preferred place ID for results (default "7207").
+#' @param per_page Numeric. Observations per page (max 200, default 200).
+#' @param page Numeric. Page number to fetch (if NULL, fetches all).
+#' @param verbose Logical. If TRUE, prints progress messages.
+#' @return A tibble of observations, including a `photo_url` column and all metadata returned by the API.
+#' @details Either `year` or `start_date`/`end_date` must be supplied, not both. If spatial filtering is used, all of `lat`, `lng`, and `radius_km` must be provided.
 #' @export
 get_inat_obs <- function(users,
                          taxon_id,
