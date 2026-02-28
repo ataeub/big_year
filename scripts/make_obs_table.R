@@ -1,3 +1,21 @@
+#' Create a cleaned observation table for iNaturalist users and taxa
+#'
+#' @param users Character. iNaturalist username(s) or user ID(s).
+#' @param year Numeric. Year of observations to fetch.
+#' @param taxon_id Numeric. iNaturalist taxon ID.
+#' @param user_pseudonyms Named character vector. Optional mapping of usernames to pseudonyms.
+#' @param only_species Logical. If TRUE, only include species-level observations (default: TRUE).
+#' @param ssp_to_sp Logical. If TRUE, replace subspecies with parent species (default: TRUE).
+#' @param cache Logical. If TRUE, use cached data if available and valid (default: TRUE).
+#'
+#' @return A tibble with selected and cleaned observation columns, including author, datetime, scientific and common names, coordinates, place, photo URLs, conservation status, establishment means, and URI.
+#' @details
+#' - Fetches observations from iNaturalist using `get_inat_obs()`.
+#' - Caches results to avoid redundant API calls.
+#' - Optionally replaces subspecies with parent species and renames authors.
+#' - Extracts and formats photo URLs.
+#' - Filters to species-level observations if requested.
+#' @export
 make_obs_table <- function(users,
                            year = NULL,
                            start_date = NULL,
