@@ -128,14 +128,6 @@ make_obs_table <- function(users,
       )
     )
 
-  if (isTRUE(ssp_to_sp)) {
-    obs <- replace_subspecies_with_parent(obs)
-  }
-
-  if (!is.null(user_pseudonyms)) {
-    obs <- rename_obs_authors(obs, user_pseudonyms)
-  }
-
   obs |>
     dplyr::filter(if (only_species) taxon.rank_level <= 10 else TRUE) |>
     dplyr::select(
