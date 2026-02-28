@@ -1,13 +1,13 @@
 ---
-title: "🦆 Big year 2026 🐦‍⬛"
+title: ""
+page-layout: full
 format:
-  html:
+  dashboard:
     css: styles.css
 execute:
   echo: false
   warning: false
   message: false
-  runtime: shiny
 project:
     execute-dir: project
 ---
@@ -17,7 +17,7 @@ scripts <- list.files("scripts/", pattern = "\\.R$", full.names = TRUE)
 invisible(lapply(scripts, source))
 
 obs <- make_obs_table(
-  users = "splendidfairywren,kjaeck", # Don't add commas between names!
+  users = "kjaeck,splendidfairywren", # Don't add commas between names!
   year = 2026,
   taxon_id = 3,
   user_pseudonyms = c(
@@ -28,6 +28,7 @@ obs <- make_obs_table(
   ssp_to_sp = TRUE # Will replace all taxa info (Name, Conservation status, etc.) with the parent species
 )
 ```
+
 # Summary
 ::: {.stat-grid}
 ```{r results="asis"}
@@ -35,36 +36,40 @@ cat(make_author_stat_cards(obs))
 ```
 :::
 
-## Rote Liste (Rote-Liste-Zentrum)
+## Rote Liste species
 ::: {.stat-grid}
 ```{r results="asis"}
 cat(make_rlz_stat_cards(obs))
 ```
 :::
 
-## Possible species
-::: {.stat-grid}
-```{r results="asis"}
-cat(make_species_coverage_card(obs))
-```
-:::
-
-# Accumulative Species Plot
+# Timeline
 ```{r}
 plotly::ggplotly(plot_accum_species(obs))
 ```
 
-# Interactive Observation Map
+# Map
 ```{r}
 plot_obs_map(obs)
 ```
 
-# Individual Observations Table
+# Observations
 ```{r}
 make_obs_html_table(obs)
 ```
 
-# Observed Species Table
+# Species
+## Row {.flow}
+::: {.card title="Species table"}
 ```{r}
 make_species_html_table(obs)
 ```
+:::
+## Row {.flow}
+::: {.card title="Possible species"}
+::: {.stat-grid}
+```{r results="asis"}
+# cat(make_species_coverage_card(obs))
+```
+:::
+:::
