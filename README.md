@@ -3,6 +3,7 @@
 ## To-Do
 
 -   [ ] Make README with usage instruction
--   [ ] Go from single qmd to a website
+-   [x] Go from single qmd to a website
 -   [ ] Make selection to opt-out hybrids
--   [x] Make some kind of comparison of species observed vs. a list of species. E.g. % species in Germany from Ebird in the locations you visited
+-   [ ] Possible species for visited locations
+-   [x] Recent species with picture
