@@ -8,7 +8,6 @@
 #' @param locale_id Character. Preferred place ID for results (default "7207").
 #' @param per_page Numeric. Observations per page (max 200, default 200).
 #' @param page Numeric. Page number to fetch (if NULL, fetches all).
-#' @param verbose Logical. If TRUE, prints progress messages.
 #' @return A tibble of observations, including a `photo_url` column and all metadata returned by the API.
 #' @details Either `year` or `start_date`/`end_date` must be supplied, not both. If spatial filtering is used, all of `lat`, `lng`, and `radius_km` must be provided.
 #' @export
