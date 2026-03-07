@@ -29,8 +29,8 @@ make_recent_species_cards <- function(obs) {
         paste0(
           "<div class='stat-card' id='", card_id, "' style='margin:5px; display:inline-block; padding:10px; border-radius:6px; background:#e0f7fa; width:320px;'>",
           "<div class='author' style='font-weight:bold; margin-bottom:5px;'>", author, "</div>",
-          "<div class='slideshow-container' style='position:relative; width:300px; margin:0 auto;'>",
-          "<img class='slideshow-image' src='' style='width:300px; height:300px; object-fit:cover; border-radius:4px;' />",
+          "<div class='slideshow-container' style='position:relative; width:280px; margin:0 auto;'>",
+          "<img class='slideshow-image' src='' style='width:280px; height:280px; object-fit:cover; border-radius:4px;' />",
           "<div class='photo-counter' style='text-align:center; font-size:14px; margin-top:8px; color:#333; line-height:1.6;'></div>",
           if (length(photos_medium) > 1) {
             paste0(
@@ -68,6 +68,13 @@ make_recent_species_cards <- function(obs) {
           "  const prevBtn = card.querySelector('.prev-btn');",
           "  if (nextBtn) nextBtn.onclick = () => { currentIndex = (currentIndex + 1) % photos.length; updateImage(); };",
           "  if (prevBtn) prevBtn.onclick = () => { currentIndex = (currentIndex - 1 + photos.length) % photos.length; updateImage(); };",
+          "  let touchStartX = 0;",
+          "  img.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });",
+          "  img.addEventListener('touchend', (e) => {",
+          "    const touchEndX = e.changedTouches[0].clientX;",
+          "    if (touchEndX < touchStartX - 30) { currentIndex = (currentIndex + 1) % photos.length; updateImage(); }",
+          "    else if (touchEndX > touchStartX + 30) { currentIndex = (currentIndex - 1 + photos.length) % photos.length; updateImage(); }",
+          "  });",
           "})();",
           "</script>",
           "</div>"
