@@ -117,6 +117,11 @@ make_obs_table <- function(users,
         photo_url,
         "square.jpg",
         "original.jpg"
+      ),
+      photo_url_medium = stringr::str_replace(
+        photo_url,
+        "square.jpg",
+        "medium.jpg"
       )
     )
 
@@ -133,6 +138,7 @@ make_obs_table <- function(users,
       coords = location,
       place = place_guess,
       photo = photo_url,
+      photo_medium = photo_url_medium,
       photo_full = photo_url_full,
       cons_auth = taxon.conservation_status.authority,
       cons_stat = taxon.conservation_status.status_name,
