@@ -30,16 +30,17 @@ obs <- make_obs_table(
 ```
 
 # Summary
+## Row {.flow}
 ::: {.stat-grid}
 ```{r results="asis"}
 cat(make_author_stat_cards(obs))
 ```
 :::
 
-## Rote Liste species
+## Row {.flow}
 ::: {.stat-grid}
 ```{r results="asis"}
-cat(make_rlz_stat_cards(obs))
+cat(make_recent_species_cards(obs))
 ```
 :::
 
